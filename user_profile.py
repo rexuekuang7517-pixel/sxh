@@ -8,6 +8,22 @@ A simple module for managing user profile settings.
 class UserProfile:
     """Represents a user profile with customizable settings."""
     
+    # Default settings for new user profiles
+    _DEFAULT_SETTINGS = {
+        'email': '',
+        'notifications': True,
+        'theme': 'light',
+        'language': 'en'
+    }
+    
+    # Expected types for each setting
+    _EXPECTED_TYPES = {
+        'email': str,
+        'notifications': bool,
+        'theme': str,
+        'language': str
+    }
+    
     def __init__(self, username):
         """
         Initialize a user profile.
@@ -21,12 +37,7 @@ class UserProfile:
         if not isinstance(username, str) or not username.strip():
             raise ValueError("Username must be a non-empty string")
         self.username = username
-        self.settings = {
-            'email': '',
-            'notifications': True,
-            'theme': 'light',
-            'language': 'en'
-        }
+        self.settings = self._DEFAULT_SETTINGS.copy()
     
     def update_setting(self, key, value):
         """
@@ -46,14 +57,7 @@ class UserProfile:
             return False
         
         # Validate value type based on setting key
-        expected_types = {
-            'email': str,
-            'notifications': bool,
-            'theme': str,
-            'language': str
-        }
-        
-        expected_type = expected_types.get(key)
+        expected_type = self._EXPECTED_TYPES.get(key)
         if expected_type and not isinstance(value, expected_type):
             raise TypeError(f"Setting '{key}' expects {expected_type.__name__}, got {type(value).__name__}")
         
