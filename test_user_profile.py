@@ -31,6 +31,22 @@ class TestUserProfile(unittest.TestCase):
         result = self.profile.update_setting('invalid_key', 'value')
         self.assertFalse(result)
     
+    def test_update_setting_type_validation(self):
+        """Test that update_setting validates value types."""
+        with self.assertRaises(TypeError):
+            self.profile.update_setting('notifications', 'not_a_bool')
+        with self.assertRaises(TypeError):
+            self.profile.update_setting('theme', 123)
+    
+    def test_initialization_with_invalid_username(self):
+        """Test that initialization validates username."""
+        with self.assertRaises(ValueError):
+            UserProfile('')
+        with self.assertRaises(ValueError):
+            UserProfile('   ')
+        with self.assertRaises(ValueError):
+            UserProfile(None)
+    
     def test_get_setting(self):
         """Test getting a setting value."""
         value = self.profile.get_setting('notifications')

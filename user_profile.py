@@ -14,7 +14,12 @@ class UserProfile:
         
         Args:
             username (str): The username for this profile
+            
+        Raises:
+            ValueError: If username is empty or not a string
         """
+        if not isinstance(username, str) or not username.strip():
+            raise ValueError("Username must be a non-empty string")
         self.username = username
         self.settings = {
             'email': '',
@@ -33,11 +38,27 @@ class UserProfile:
             
         Returns:
             bool: True if update was successful, False otherwise
+            
+        Raises:
+            TypeError: If value type doesn't match expected type for the setting
         """
-        if key in self.settings:
-            self.settings[key] = value
-            return True
-        return False
+        if key not in self.settings:
+            return False
+        
+        # Validate value type based on setting key
+        expected_types = {
+            'email': str,
+            'notifications': bool,
+            'theme': str,
+            'language': str
+        }
+        
+        expected_type = expected_types.get(key)
+        if expected_type and not isinstance(value, expected_type):
+            raise TypeError(f"Setting '{key}' expects {expected_type.__name__}, got {type(value).__name__}")
+        
+        self.settings[key] = value
+        return True
     
     def get_setting(self, key):
         """
