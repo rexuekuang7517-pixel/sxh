@@ -81,10 +81,16 @@ class UserProfile:
         Get all settings.
         
         Returns:
-            dict: A dictionary of all settings
+            dict: A copy of the settings dictionary. Modifications to the
+                  returned dictionary will not affect the profile's internal state.
         """
         return self.settings.copy()
     
     def __str__(self):
-        """String representation of the user profile."""
+        """
+        String representation of the user profile.
+        
+        Note: This representation may include sensitive information
+        such as email addresses. Use with caution in production environments.
+        """
         return f"UserProfile(username='{self.username}', settings={self.settings})"
